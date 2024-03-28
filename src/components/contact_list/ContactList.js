@@ -44,10 +44,25 @@ export default function ContactList() {
          
             if(sortedDesc[0] != undefined){
               toggleLock(sortedDesc[0],false,0)
+              sortedDesc.shift()
+               setCustomers(sortedDesc)
           }
            localStorage.setItem("userdata", false);
         }
      
+
+      })
+  }
+  async function deletedata(id) {
+    await axios.delete(`${process.env.REACT_APP_Contact_API}/${id}`)
+      .then((data) => {
+        console.log("delete success")
+        console.log(data)
+        toast.success('Data Deleted Successfully !', {
+          position: toast.POSITION.TOP_RIGHT
+        });
+        getdata()
+
 
       })
   }
@@ -56,6 +71,9 @@ export default function ContactList() {
     navigate("/home/" + id);
 
 
+  }
+  const deleteContact = (id) => {
+    deletedata(id)
   }
   const addContact = () => {
 
@@ -74,6 +92,10 @@ export default function ContactList() {
     return <Button type="button" icon='pi pi-pencil' className="p-button-sm p-button-text" onClick={() => editContact(rowData.id)} />;
   };
 
+  const deleteTemplate = (rowData, options) => {
+    const id = rowData.id
+    return <Button type="button" icon='pi pi-trash' className="p-button-sm p-button-text" onClick={() => deleteContact(rowData.id)} />;
+  };
   const toggleLock = (data, frozen, index) => {
     let _lockedCustomers, _unlockedCustomers;
 
@@ -128,6 +150,7 @@ export default function ContactList() {
               <Column field="PostalCode" header="PostalCode" sortable></Column>
               <Column style={{ flex: '0 0 4rem' }} body={lockTemplate}></Column>
               <Column style={{ flex: '0 0 4rem' }} body={editTemplate}></Column>
+              <Column style={{ flex: '0 0 4rem' }} body={deleteTemplate}></Column>
             </DataTable>
           </div>
         </Container>

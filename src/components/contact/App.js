@@ -31,14 +31,16 @@ export default function Home(props) {
   const emailRegex = /\S+@\S+\.\S+/;
 
   useEffect(() => {
+    if (id != "newcontact") {
     getdata()
+    }
 
   }, [])
   const navigate = useNavigate();
   async function getdata() {
     await axios.get(`${process.env.REACT_APP_Contact_API}` + "/" + id)
       .then((data) => {
-        if (id != "newcontact") {
+       
           setFirstName(data.data.FirstName)
           setPhoneNumber(data.data.PhoneNumber)
           setAddress(data.data.Address)
@@ -48,7 +50,7 @@ export default function Home(props) {
           setPostalCode(data.data.PostalCode)
           setState(data.data.State)
           setCountry(data.data.Country)
-        }
+        
         setdata(data.data)
         // setFilteredList(data.data)
         console.log(data)
